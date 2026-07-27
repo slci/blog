@@ -35,11 +35,39 @@ Do **not** commit `_site/` or `vendor/` (see `.gitignore`).
 | `_config.yml` | Production Jekyll config |
 | `_config_local.yml` | Local overrides (empty baseurl) |
 | `_layouts/` | `default`, `home`, `post`, `page` |
-| `_posts/YYYY-MM-DD-slug.md` | Blog posts |
+| `_posts/<slug>/YYYY-MM-DD-<slug>.md` | One directory per post (Jekyll still requires `DATE-title.md` filename) |
+| `_posts/<slug>/assets/` | Post-only media (diagrams, images, sources) - **source of truth** |
 | `assets/css/main.css` | Site styles (source of truth for visual system) |
-| `assets/images/` | Favicons, diagrams, media |
+| `assets/images/` | **Site-wide** assets only (favicons, shared chrome) |
+| `scripts/copy_post_assets.rb` | Copies `_posts/*/assets/**` → `_site/assets/posts/<slug>/**` on each build |
+| `scripts/jekyll-with-post-assets` | Runs Jekyll with that hook (use this, not bare `jekyll`) |
 | `about.md`, `index.md` | Static pages |
 | `serve.sh` | Local serve helper |
+
+### Per-post layout (required)
+
+```text
+_posts/<slug>/
+  YYYY-MM-DD-<slug>.md
+  assets/
+    diagram.svg
+    diagram.excalidraw
+    photo.png
+```
+
+- Subdirectories under `_posts/` are supported; they are **not** part of the public URL.
+- Filename must still match `YYYY-MM-DD-title.md`.
+- Prefer `slug` = short kebab-case id (e.g. `tailscale-docker-immich`).
+- Jekyll does not publish non-post files under `_posts/` by default. The `github-pages` gem also disables `_plugins/`. Use **`./scripts/jekyll-with-post-assets`** (or `./serve.sh`) so `scripts/copy_post_assets.rb` registers a `post_write` hook and copies each post's `assets/` into the built site at **`/assets/posts/<slug>/`**.
+- Reference post assets with Liquid + `relative_url` (public path, not the `_posts` path):
+
+```markdown
+![Alt text]({{ '/assets/posts/<slug>/diagram.svg' | relative_url }})
+```
+
+- Do **not** put post-specific media under `assets/images/` (that folder is for favicons and global UI).
+- Prefer `./serve.sh` / `./scripts/jekyll-with-post-assets build` over bare `bundle exec jekyll …` so post assets are not missing.
+- Deploy via `.github/workflows/pages.yml` (GitHub Actions) so production builds include the copy step. In repo Settings → Pages, set Source to **GitHub Actions**.
 
 New posts use front matter:
 
@@ -54,7 +82,7 @@ excerpt: >-
 ---
 ```
 
-Permalink pattern: `/:year/:month/:day/:title/`.
+Permalink pattern: `/:year/:month/:day/:title/` (from `_config.yml`; independent of the `_posts/` subdirectory).
 
 ---
 
@@ -144,11 +172,13 @@ CSS variables for both palettes live in `assets/css/main.css` (`--frappe-*`, `--
 - Use the **excalidraw-diagram** skill when producing Excalidraw JSON; for blog embed, ship SVG (and optional PNG).
 - No em dashes in diagram labels.
 
-Example diagram assets for the Tailscale/Docker post:
+Example diagram assets for the Tailscale/Docker post (in-repo path):
 
-- `assets/images/tailscale-docker-docker-user-sketch.svg` (primary embed)
-- `assets/images/tailscale-docker-docker-user-sketch.excalidraw`
-- `assets/images/tailscale-docker-docker-user-sketch.png`
+- `_posts/tailscale-docker-immich/assets/tailscale-docker-docker-user-sketch.svg` (primary embed)
+- `_posts/tailscale-docker-immich/assets/tailscale-docker-docker-user-sketch.excalidraw`
+- `_posts/tailscale-docker-immich/assets/tailscale-docker-docker-user-sketch.png`
+
+Published URL prefix: `/assets/posts/tailscale-docker-immich/`.
 
 ### Favicons
 

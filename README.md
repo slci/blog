@@ -19,10 +19,14 @@ If you run plain `bundle exec jekyll serve` (production config only), the site l
 
 ## New post
 
-Create a file under `_posts/`:
+One directory per post. Keep markdown and post-only media together:
 
 ```text
-_posts/YYYY-MM-DD-short-title.md
+_posts/my-post-slug/
+  YYYY-MM-DD-my-post-slug.md
+  assets/
+    diagram.svg
+    photo.png
 ```
 
 Front matter:
@@ -35,6 +39,20 @@ date: YYYY-MM-DD
 tags: [tag1, tag2]
 ---
 ```
+
+In the post body, link the **published** path (copied at build by `scripts/copy_post_assets.rb`):
+
+```markdown
+![Diagram]({{ '/assets/posts/my-post-slug/diagram.svg' | relative_url }})
+```
+
+Always build/serve via `./serve.sh` or `./scripts/jekyll-with-post-assets …` so those files land in `_site`. Bare `bundle exec jekyll build` skips them (`github-pages` disables `_plugins/`).
+
+Site-wide favicons live in `assets/images/` (not under a post folder).
+
+### GitHub Pages
+
+`.github/workflows/pages.yml` builds with the post-assets hook and deploys. In repo **Settings → Pages**, set Source to **GitHub Actions**.
 
 ## GitHub Pages
 

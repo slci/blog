@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Run Jekyll with the post-assets copy hook pre-registered.
+# github-pages disables _plugins/; requiring the hook before jekyll still works.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+export PATH="${HOME}/.local/share/gem/ruby/3.4.0/bin:${PATH}"
+# Load hook, then jekyll CLI
+exec bundle exec ruby -I"$ROOT/scripts" -r copy_post_assets -S jekyll "$@"
