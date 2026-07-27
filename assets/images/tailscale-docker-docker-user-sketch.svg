@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 640" width="940" height="640" role="img" aria-labelledby="title desc">
+  <title id="title">Why LAN reaches Immich and Tailscale does not (sketch)</title>
+  <desc id="desc">Hand-drawn style diagram: LAN allowed through DOCKER-USER, Tailscale CGNAT dropped after DNAT.</desc>
+  <defs>
+    <!-- subtle paper texture -->
+    <filter id="sketch" x="-2%" y="-2%" width="104%" height="104%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" result="noise" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="hatchG" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#6ee7b7" stroke-width="2"/>
+    </pattern>
+    <pattern id="hatchR" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#fca5a5" stroke-width="2"/>
+    </pattern>
+    <pattern id="hatchY" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(28)">
+      <line x1="0" y1="0" x2="0" y2="7" stroke="#fcd34d" stroke-width="2"/>
+    </pattern>
+    <pattern id="hatchB" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(20)">
+      <line x1="0" y1="0" x2="0" y2="9" stroke="#93c5fd" stroke-width="1.8"/>
+    </pattern>
+    <pattern id="xhatchR" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M0 10 L10 0 M-2 2 L2 -2 M8 12 L12 8" stroke="#f87171" stroke-width="1.5"/>
+    </pattern>
+    <marker id="arrG" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L9,3 L0,6 Q2,3 0,0" fill="#047857"/>
+    </marker>
+    <marker id="arrR" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L9,3 L0,6 Q2,3 0,0" fill="#b91c1c"/>
+    </marker>
+  </defs>
+
+  <rect width="940" height="640" fill="#ffffff"/>
+
+  <g filter="url(#sketch)" font-family="Comic Sans MS, Segoe Print, cursive, system-ui" fill="#1e3a5f">
+    <!-- Title -->
+    <text x="42" y="42" font-size="24" font-weight="700" fill="#1e3a5f">Why LAN reaches Immich and Tailscale does not</text>
+    <text x="42" y="68" font-size="14" fill="#64748b">Same host, same container. DOCKER-USER allows RFC1918;</text>
+    <text x="42" y="86" font-size="14" fill="#64748b">Tailscale CGNAT is dropped after DNAT.</text>
+
+    <!-- Laptop (wobbly rect) -->
+    <path d="M48,155 Q55,148 120,150 Q180,152 215,148 Q222,160 220,200 Q218,235 210,238 Q140,242 80,240 Q50,238 45,200 Q42,170 48,155 Z"
+          fill="url(#hatchG)" stroke="#047857" stroke-width="2.4" stroke-linejoin="round"/>
+    <text x="132" y="188" text-anchor="middle" font-size="16" font-weight="700">Laptop (LAN)</text>
+    <text x="132" y="210" text-anchor="middle" font-size="13" font-family="ui-monospace, monospace">192.168.88.50</text>
+
+    <!-- Phone -->
+    <path d="M50,385 Q70,375 130,378 Q190,380 218,372 Q228,390 225,430 Q220,465 200,470 Q130,478 75,472 Q48,468 42,430 Q40,400 50,385 Z"
+          fill="url(#hatchR)" stroke="#b91c1c" stroke-width="2.4" stroke-linejoin="round"/>
+    <text x="132" y="418" text-anchor="middle" font-size="16" font-weight="700">Phone (Tailscale)</text>
+    <text x="132" y="440" text-anchor="middle" font-size="13" font-family="ui-monospace, monospace">100.87.231.126</text>
+
+    <!-- Host box -->
+    <path d="M300,130 Q320,120 470,122 Q620,125 640,118 Q655,140 652,300 Q650,470 640,490 Q500,505 360,500 Q305,495 295,470 Q288,300 292,180 Q295,145 300,130 Z"
+          fill="url(#hatchB)" stroke="#1e3a5f" stroke-width="2.5" stroke-linejoin="round" fill-opacity="0.55"/>
+    <text x="320" y="155" font-size="17" font-weight="700" fill="#1e40af">Linux host (Tailscale + Docker)</text>
+
+    <!-- DOCKER-USER -->
+    <path d="M330,195 Q350,185 470,188 Q580,190 600,182 Q615,200 612,320 Q608,420 590,430 Q470,442 360,438 Q325,432 320,400 Q315,280 318,220 Q320,200 330,195 Z"
+          fill="url(#hatchY)" stroke="#b45309" stroke-width="2.5" stroke-linejoin="round"/>
+    <text x="345" y="220" font-size="16" font-weight="700">DOCKER-USER (ufw-docker)</text>
+    <text x="345" y="250" font-size="13" font-family="ui-monospace, monospace">RETURN  src 10/8</text>
+    <text x="345" y="270" font-size="13" font-family="ui-monospace, monospace">RETURN  src 172.16/12</text>
+    <text x="345" y="290" font-size="13" font-family="ui-monospace, monospace" fill="#047857" font-weight="700">RETURN  src 192.168/16</text>
+    <text x="345" y="320" font-size="13" font-family="ui-monospace, monospace" fill="#b91c1c" font-weight="700">DENY NEW -&gt; dest 172.16/12</text>
+    <text x="345" y="340" font-size="12" fill="#64748b">(after DNAT to container)</text>
+    <text x="345" y="370" font-size="13" fill="#b45309">100.64/10 is not in the list</text>
+
+    <!-- Immich -->
+    <path d="M720,200 Q740,190 810,192 Q880,195 895,188 Q905,210 902,260 Q898,295 880,300 Q800,308 740,305 Q715,300 710,270 Q708,230 720,200 Z"
+          fill="url(#hatchG)" stroke="#047857" stroke-width="2.4" stroke-linejoin="round"/>
+    <text x="805" y="240" text-anchor="middle" font-size="15" font-weight="700">Immich container</text>
+    <text x="805" y="262" text-anchor="middle" font-size="13" font-family="ui-monospace, monospace">172.18.0.3:2283</text>
+
+    <!-- DROP -->
+    <path d="M725,395 Q750,385 810,388 Q880,390 900,382 Q910,400 908,445 Q900,470 870,475 Q790,482 740,478 Q715,472 710,440 Q708,410 725,395 Z"
+          fill="url(#xhatchR)" stroke="#b91c1c" stroke-width="2.4" stroke-linejoin="round"/>
+    <text x="805" y="430" text-anchor="middle" font-size="16" font-weight="700">DROP</text>
+    <text x="805" y="452" text-anchor="middle" font-size="13">(counter ticks up)</text>
+
+    <!-- Arrows (slightly curved, sketchy) -->
+    <path d="M220,195 Q260,200 320,230" fill="none" stroke="#047857" stroke-width="2.6" stroke-linecap="round" marker-end="url(#arrG)"/>
+    <text x="228" y="185" font-size="13" fill="#047857">src 192.168</text>
+    <text x="228" y="200" font-size="13" fill="#047857">:2283</text>
+
+    <path d="M220,430 Q270,420 325,380" fill="none" stroke="#b91c1c" stroke-width="2.6" stroke-linecap="round" marker-end="url(#arrR)"/>
+    <text x="228" y="455" font-size="13" fill="#b91c1c">src 100.64/10</text>
+    <text x="228" y="470" font-size="13" fill="#b91c1c">:2283</text>
+
+    <path d="M610,250 Q660,245 715,245" fill="none" stroke="#047857" stroke-width="2.6" stroke-linecap="round" marker-end="url(#arrG)"/>
+    <text x="625" y="235" font-size="13" fill="#047857" font-weight="700">RETURN</text>
+    <text x="625" y="250" font-size="12" fill="#047857">allowed</text>
+
+    <path d="M610,390 Q660,400 715,425" fill="none" stroke="#b91c1c" stroke-width="2.6" stroke-linecap="round" marker-end="url(#arrR)"/>
+    <text x="625" y="400" font-size="13" fill="#b91c1c" font-weight="700">not allowed</text>
+    <text x="625" y="416" font-size="12" fill="#b91c1c">-&gt; DROP</text>
+
+    <!-- Fix note -->
+    <path d="M40,520 Q80,512 470,515 Q850,518 900,510 Q910,530 905,565 Q890,590 500,592 Q80,590 45,580 Q35,555 40,520 Z"
+          fill="#f8fafc" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="6 4" stroke-linejoin="round"/>
+    <text x="58" y="548" font-size="13" fill="#374151">Fix: RETURN -s 100.64.0.0/10 in after.rules (IPv4) and fd7a:…/48 in after6.rules,</text>
+    <text x="58" y="568" font-size="13" fill="#374151">then ufw reload - and confirm the live DOCKER-USER chain, not only the file on disk.</text>
+  </g>
+</svg>

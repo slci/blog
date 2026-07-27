@@ -30,7 +30,7 @@ On the LAN, `http://192.168.x.x:2283` worked. From the phone, `http://100.x.x.x:
 
 Out of the box, "Docker + published port + Tailscale" looks like it should just work. On a host that also runs UFW with the common ufw-docker rules, it often does not.
 
-![LAN reaches Immich; Tailscale is dropped in DOCKER-USER]({{ '/assets/images/tailscale-docker-docker-user.svg' | relative_url }})
+![LAN reaches Immich; Tailscale is dropped in DOCKER-USER]({{ '/assets/images/tailscale-docker-docker-user-sketch.svg' | relative_url }})
 
 *Two sources, same container. After DNAT the destination is `172.18.x`. LAN is in the allow list. Tailscale CGNAT is not.*
 
