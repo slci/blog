@@ -1,0 +1,8 @@
+# Local preview overrides (merged after _config.yml).
+# Use: bundle exec jekyll serve --config _config.yml,_config_local.yml
+#
+# Empty baseurl so the site is at http://127.0.0.1:4000/ (not only /blog/).
+# GitHub Pages still uses baseurl: /blog from _config.yml alone.
+
+url: "http://127.0.0.1:4000"
+baseurl: ""

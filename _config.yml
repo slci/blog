@@ -1,0 +1,28 @@
+title: Notes from the terminal
+description: Dev and IT stories - home labs, networking, Docker, and the occasional war story.
+url: "https://slci.github.io"
+baseurl: "/blog"
+author: slci
+lang: en
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: highlight
+
+permalink: /:year/:month/:day/:title/
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+exclude:
+  - README.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .gitignore
