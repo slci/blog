@@ -18,7 +18,7 @@ ports:
   - "2283:2283"
 ```
 
-The app speaks plain HTTP. That sounds wrong until you remember what Tailscale is: a WireGuard mesh between *your* devices. Packets between phone and host are already encrypted on the wire. The browser or Immich app may show `http://`, but that HTTP rides inside the tunnel. Random hosts on the internet never see port 2283 unless you also enable Funnel, open a router forward, or bind the service on a public interface and leave it open.
+The app speaks plain HTTP. That sounds wrong until you remember what Tailscale is: a WireGuard mesh between *your* devices. Packets between phone and host are already encrypted on the wire. The browser or Immich app may show `http://`, but that HTTP rides inside the tunnel. Random hosts on the internet never see port 2283 unless you also enable [Funnel](https://tailscale.com/docs/features/tailscale-funnel), open a router forward, or bind the service on a public interface and leave it open.
 
 So is plain HTTP on the tailnet "safe"? Safe enough for a home lab if you trust the model: only enrolled nodes join the mesh, ACLs can restrict who talks to what, and you are not advertising the port to the world. It is not a substitute for app-level HTTPS when the service must be public, shared with untrusted clients, or when you need browser security features that assume TLS end-to-end. For a private photo library between my own phone and my own server, HTTP over Tailscale is a deliberate trade: less cert plumbing, still encrypted in transit between peers.
 
@@ -30,7 +30,7 @@ On the LAN, `http://192.168.x.x:2283` worked. From the phone, `http://100.x.x.x:
 
 Out of the box, "Docker + published port + Tailscale" looks like it should just work. On a host that also runs UFW with the common ufw-docker rules, it often does not.
 
-![LAN reaches Immich; Tailscale is dropped in DOCKER-USER]({{ '/assets/posts/tailscale-docker-immich/tailscale-docker-docker-user-sketch.svg' | relative_url }})
+![LAN reaches Immich; Tailscale is dropped in DOCKER-USER]({{ '/assets/posts/tailscale-docker-immich/tailscale-docker-user.svg' | relative_url }})
 
 *Two sources, same container. After DNAT the destination is `172.18.x`. LAN is in the allow list. Tailscale CGNAT is not.*
 

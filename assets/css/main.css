@@ -50,7 +50,7 @@
   --latte-selection: #d8dae1;
 
   --table-head-bg: #f6f8fa;
-  --max: 42rem;
+  --max: 120ch;
   --font: "Segoe UI", system-ui, -apple-system, sans-serif;
   --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
 }
@@ -300,16 +300,33 @@ a:hover {
 
 .post-content img,
 .post-content svg {
-  max-width: 100%;
+  display: block;
+  width: 80%;
+  max-width: 80%;
   height: auto;
+  margin: 1rem auto 0.5rem;
   border-radius: 4px;
   border: 1px solid var(--border);
-  display: block;
-  margin: 0.25rem 0 0.5rem;
 }
 
-.post-content p > em:only-child {
+/* Markdown wraps images in <p>; keep the figure block centered */
+.post-content p:has(> img:only-child),
+.post-content p:has(> a:only-child > img:only-child) {
+  margin: 1rem auto 0.5rem;
+  text-align: center;
+}
+
+.post-content p:has(> img:only-child) img,
+.post-content p:has(> a:only-child > img:only-child) img {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Caption under an image only: *text* on the line right after a figure */
+.post-content p:has(> img:only-child) + p > em:only-child,
+.post-content p:has(> a:only-child > img:only-child) + p > em:only-child {
   display: block;
+  text-align: center;
   color: var(--muted);
   font-size: 0.9rem;
   margin: 0 0 1.5rem;
@@ -371,7 +388,9 @@ a:hover {
 .post-content div.highlighter-rouge,
 .post-content figure.highlight,
 .post-content > pre {
-  margin: 0 0 1.25rem;
+  width: 80%;
+  max-width: 80%;
+  margin: 0 auto 1.25rem 0;
   border-radius: 8px;
   overflow: hidden;
   background: var(--frappe-base);
